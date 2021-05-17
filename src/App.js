@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import {Route, BrowserRouter as Router} from 'react-router-dom';
 import './App.css';
 
 //Importing COmponents
 import Form from "./components/Form"
 import TodoList from "./components/TodoList"
 import PostList from "./components/PostList"
+import Hello from "./components/Hello"
 function App() {
   
   const [inputText, setInputText] = useState("");
@@ -12,6 +14,7 @@ function App() {
   const [status, setStatus] = useState("all");
   const [filteredTodos, setFilteredTodos] = useState([]);
   const [posts, setPosts] = useState([]);
+  const apiURL = "http://localhost:8080/api/posts/?page=1&limit=10";
 
   useEffect(() => {
     getLocalTodos();
@@ -25,9 +28,11 @@ function App() {
 
   // Functions
   const fetchPosts = () => {
-    fetch('http://localhost:5000/mews')
+    fetch(apiURL)
         .then(res => res.json())
         .then(res => {
+          //res.key = res[0]._id;
+          //console.log(res);
           setPosts(res);
         });
   }
@@ -57,14 +62,23 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <header>
-        <h1>PerGO</h1>
-      </header>
-        <Form inputText={inputText} todos={todos} setTodos={setTodos} setInputText={setInputText} setStatus={setStatus}/>
-        <TodoList setTodos={setTodos} todos={todos} filteredTodos={filteredTodos} />
-        <PostList posts={posts}/>
-    </div>
+    <Router>
+     
+      <Route path="/" exact>
+         <div className="App">
+        <header>
+          <h1>PerGO</h1>
+        </header>
+          <Form inputText={inputText} todos={todos} setTodos={setTodos} setInputText={setInputText} setStatus={setStatus}/>
+          <TodoList setTodos={setTodos} todos={todos} filteredTodos={filteredTodos} />
+          <PostList posts={posts}/>
+      </div> 
+      </Route>
+
+      <Route path="/hello" exact component={Hello} />
+      <Route path="/postid/:id" exact component={PostList} />
+
+    </Router>
   );
 }
 

@@ -9,6 +9,14 @@ const Post = ({post}) => {
     const [shareCount, setShareCount] = useState(post.shares);
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
+    const initialList = [];
+    post.comments.forEach((comment) => {
+      initialList.push(<li>{comment}</li>);
+    });
+
+    const [commentList, setCommentList] = useState(initialList);
+    const [currentComment, setCurrentComment] = useState("");
+
     const apiURL = "http://localhost:8080/api/posts/";
     const likeAction = () => {
         const likeUpdate = {
@@ -34,6 +42,22 @@ const Post = ({post}) => {
 
     const postDate = (new Date(post.createdAt));
 
+    function sendComment() {
+      const commentUpdate = {
+        "comments": (post.comments.push(currentComment))
+      };
+      fetch((apiURL + post._id), {
+        method: 'PUT',
+        body: JSON.stringify(commentUpdate),
+        headers: {
+            'content-type': 'application/json'
+        }
+      }).then(e => {
+        setCommentCount(post.comments.length + 1);
+        post.comments.push(currentComment);
+      });
+    }
+
     return (
         <div className="post">
           <footer className="postHeader">
@@ -55,11 +79,13 @@ const Post = ({post}) => {
             <h6>{post.name + "'s post"}</h6>
             <p>{post.content}</p>
             <form>
-              <textarea>Enter comment here</textarea>
-              <button onClick={toggleModal}>Submit</button>
+              <textarea onChange={event => setCurrentComment(event.target.value)}>Enter comment here</textarea>
+              <button onClick={sendComment}>Submit</button>
             </form>
-            
             <button onClick={toggleModal}>Close</button>
+            <div>
+              {commentList}
+            </div>
           </Modal>
         </div>
     

@@ -42,9 +42,11 @@ const Post = ({post}) => {
 
     const postDate = (new Date(post.createdAt));
 
-    function sendComment() {
+    function sendComment(e) {
+      e.preventDefault();
+      console.log("here");
       const commentUpdate = {
-        "comments": (post.comments.push(currentComment))
+        "recentComment": currentComment
       };
       fetch((apiURL + post._id), {
         method: 'PUT',
@@ -53,8 +55,10 @@ const Post = ({post}) => {
             'content-type': 'application/json'
         }
       }).then(e => {
-        setCommentCount(post.comments.length + 1);
-        post.comments.push(currentComment);
+        console.log(e);
+        commentList.push(<li>{currentComment}</li>);
+        setCommentCount(commentList);
+        setCommentList(commentList);
       });
     }
 
@@ -79,7 +83,7 @@ const Post = ({post}) => {
             <h6>{post.name + "'s post"}</h6>
             <p>{post.content}</p>
             <form>
-              <textarea onChange={event => setCurrentComment(event.target.value)}>Enter comment here</textarea>
+              <textarea value={currentComment} onChange={event => setCurrentComment(event.target.value)}>Enter comment here</textarea>
               <button onClick={sendComment}>Submit</button>
             </form>
             <button onClick={toggleModal}>Close</button>

@@ -59,11 +59,12 @@ const Post = ({post}) => {
         commentList.push(<li>{currentComment}</li>);
         setCommentCount(commentList);
         setCommentList(commentList);
+        setCurrentComment("");
       });
     }
 
     return (
-        <div className="post">
+        <div className="post" onClick={console.log(":::::::")}>
           <footer className="postHeader">
               <h4>{post.type}</h4>
               <h2>{postDate.getMonth() + "-" + postDate.getDate() + "-" + postDate.getFullYear()}</h2>

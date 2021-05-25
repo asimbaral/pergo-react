@@ -1,6 +1,8 @@
 import React, { useState }  from 'react';
 import Modal from "react-modal";
 
+import { FacebookIcon, TwitterIcon, LinkedinIcon } from "react-share";
+import { FacebookShareButton, TwitterShareButton, LinkedinShareButton } from "react-share";
 Modal.setAppElement("#root");
 const Post = ({post}) => {
     const [likeCount, setLikeCount] = useState(post.likes);
@@ -92,6 +94,30 @@ const Post = ({post}) => {
               {commentList}
             </div>
           </Modal>
+          <div class="shares">
+              <FacebookShareButton
+                url="https://www.google.com"
+                quote={post.content}
+              >
+                <FacebookIcon logoFillColor="white" round={true}></FacebookIcon>
+              </FacebookShareButton>
+
+              <TwitterShareButton
+                url="https://www.google.com"
+                via={post.content}
+              >
+                <TwitterIcon logoFillColor="white" round={true}></TwitterIcon>
+              </TwitterShareButton>
+
+              <LinkedinShareButton
+                url="https://www.google.com"
+                title="Test Post"
+                summary ={post.content}
+              >
+                <LinkedinIcon logoFillColor="white" round={true}></LinkedinIcon>
+              </LinkedinShareButton>
+
+            </div>
         </div>
     
     );

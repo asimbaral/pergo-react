@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Route, BrowserRouter as Router} from 'react-router-dom';
+import {Route, BrowserRouter as Router, useParams} from 'react-router-dom';
 import './App.css';
 
 //Importing COmponents
@@ -60,6 +60,22 @@ function App() {
       setTodos(todoLocal);
     }
   }
+  const [singlePost, setSinglePost] = useState([]);
+  const PostPage = () => {
+    let { id } = useParams();
+    fetch("http://localhost:8080/api/posts/" + id)
+        .then(res => res.json())
+        .then(res => {
+          //res.key = res[0]._id;
+          console.log(res);
+          setSinglePost([res]);
+        });
+    return (
+
+      <PostList posts={singlePost}/>
+      
+      );
+  }
 
   return (
     <Router>
@@ -75,8 +91,9 @@ function App() {
       </div> 
       </Route>
 
-      <Route path="/hello" exact component={Hello} />
-      <Route path="/postid/:id" exact component={PostList} />
+      <Route path="/postid/:id" exact>
+        <PostPage />
+      </Route>
 
     </Router>
   );

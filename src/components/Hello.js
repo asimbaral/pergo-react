@@ -2,7 +2,7 @@ import React from 'react';
 
 const Hello = () => {
     return (
-        <div className="todo">
+        <div className="App">
            Hello World!
         </div>
     );

@@ -10,6 +10,7 @@ const Post = ({post}) => {
     const [commentCount, setCommentCount] = useState(post.comments.length);
     const [shareCount, setShareCount] = useState(post.shares);
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [shareModalIsOpen, setShareModalIsOpen] = useState(false);
 
     const initialList = [];
     post.comments.forEach((comment) => {
@@ -40,6 +41,10 @@ const Post = ({post}) => {
 
     function toggleModal() {
       setModalIsOpen(!modalIsOpen);
+    }
+
+    function toggleShareModal() {
+      setShareModalIsOpen(!shareModalIsOpen);
     }
 
     const postDate = (new Date(post.createdAt));
@@ -75,7 +80,7 @@ const Post = ({post}) => {
           <footer className="postBottom">
             <i class="far fa-heart" onClick={likeAction}></i>
             <i class="far fa-comments" onClick={toggleModal}></i>
-            <i class="far fa-share-square"></i>
+            <i class="far fa-share-square" onClick={toggleShareModal}></i>
           </footer>
           <footer className="postStat">
             <h5>{likeCount}</h5>
@@ -94,7 +99,9 @@ const Post = ({post}) => {
               {commentList}
             </div>
           </Modal>
-          <div class="shares">
+
+          <Modal isOpen={shareModalIsOpen} onRequestClose={toggleShareModal} contentLabel={post.name + "'s post"}>
+            <div class="shares">
               <FacebookShareButton
                 url="https://www.google.com"
                 quote={post.content}
@@ -118,6 +125,9 @@ const Post = ({post}) => {
               </LinkedinShareButton>
 
             </div>
+            <button onClick={toggleShareModal}>Close</button>
+          </Modal>
+
         </div>
     
     );

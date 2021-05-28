@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {Route, BrowserRouter as Router, useParams} from 'react-router-dom';
+import {Route, BrowserRouter as Router, useParams, Link} from 'react-router-dom';
 import './App.css';
 
 //Importing COmponents
 import Form from "./components/Form"
 import TodoList from "./components/TodoList"
 import PostList from "./components/PostList"
-import Hello from "./components/Hello"
 function App() {
   
   const [inputText, setInputText] = useState("");
@@ -60,16 +59,19 @@ function App() {
       setTodos(todoLocal);
     }
   }
-  const [singlePost, setSinglePost] = useState([]);
-  const PostPage = () => {
+  
+  function PostPage() {
+    const [singlePost, setSinglePost] = useState([]);
     let { id } = useParams();
-    fetch("http://localhost:8080/api/posts/" + id)
+    useEffect(() => {
+      fetch("http://localhost:8080/api/posts/" + id)
         .then(res => res.json())
         .then(res => {
-          //res.key = res[0]._id;
-          console.log(res);
+          console.log([res]);
           setSinglePost([res]);
         });
+    }, id);
+    
     return (
 
       <PostList posts={singlePost}/>

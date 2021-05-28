@@ -1,5 +1,6 @@
 import React, { useState }  from 'react';
 import Modal from "react-modal";
+import {Route, BrowserRouter as Router, useParams, useHistory, Redirect} from 'react-router-dom';
 
 import { FacebookIcon, TwitterIcon, LinkedinIcon } from "react-share";
 import { FacebookShareButton, TwitterShareButton, LinkedinShareButton } from "react-share";
@@ -64,14 +65,33 @@ const Post = ({post}) => {
       }).then(e => {
         console.log(e);
         commentList.push(<li>{currentComment}</li>);
-        setCommentCount(commentList);
+        setCommentCount(commentList.length);
         setCommentList(commentList);
         setCurrentComment("");
       });
     }
+    var postIDD = post._id;
+    const history = useHistory();
+    const goToPost = () => {
+      const path = "/postid/" + postIDD;
+      console.log(path);
+      history.push(path);      
+    }
+    var thisPost = post;
+    function PostPage() {
+      let { id } = useParams();
+      
+      return (
+        <div className="mews">
+          <Post post={post}/>
+        </div>
+        
+        
+        );
+    }
 
     return (
-        <div className="post" onClick={console.log(":::::::")}>
+        <div className="post" onClick={goToPost} href="/postid/60a4175ec626325b14ee6777">
           <footer className="postHeader">
               <h4>{post.type}</h4>
               <h2>{postDate.getMonth() + "-" + postDate.getDate() + "-" + postDate.getFullYear()}</h2>
@@ -127,6 +147,12 @@ const Post = ({post}) => {
             </div>
             <button onClick={toggleShareModal}>Close</button>
           </Modal>
+
+          <Router>
+            <Route path="/postid/:id" exact>
+              <PostPage />
+            </Route>
+          </Router>
 
         </div>
     
